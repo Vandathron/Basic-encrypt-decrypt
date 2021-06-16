@@ -1,0 +1,113 @@
+<section class="page" style="height: 100vh;">
+  <div class="header">
+    <p class="header-txt">Logistics Center</p>
+    <small>Click city/road to edit</small>
+  </div>
+
+  <div class="body">
+    <div class="cont-l">
+      <div class="content-left">
+        <div class="top">
+          <div class="left">
+            <p>City</p>
+            <div class="form body-section">
+              <form [formGroup] = "cityForm" (ngSubmit) = "createCity()">
+                <div class="form-field" formArrayName = "cities" *ngFor="let city of cityFormGroup.controls; let i = index;">
+                    <div [formGroupName] = "i">
+                      <input type="text" formControlName = "name" placeholder="Enter city name">
+                    </div>
+                </div>
+                <button type="button" (click) = "addCity()">Add more cities</button>
+                <button type="button" (click) = "createCity()">Create {{cityForm.get("cities")?.value.length <= 1 ? 'City' : 'Cities'}}</button>
+              </form>
+            </div>
+          </div>
+          <div class="right">
+            <p>Road</p>
+            <div class="road">
+              <select name="" id="" (change) = "setStartCity($event.target.value)">
+                <option selected disabled>Select start city</option>
+                <option *ngFor="let city of allCities" [value]='city.id'>{{city.label}}</option>
+              </select>
+
+              <select name="" id="" (change) = "setEndCity($event.target.value)">
+                <option selected disabled>Select end city</option>
+                <option *ngFor="let city of allCities"  [value]='city.id'>{{city.label}}</option>
+              </select>
+            </div>
+            <input type="number" [(ngModel)]="distance" placeholder="Enter Distance" style="margin-bottom: 25px;">
+            <button [disabled] = "startCityId == endCityId" type="button" (click) = "makeRoad()">Make road</button>
+          </div>
+        </div>
+      </div>
+      <button class="logistic-btn" (click) = "findLogisticCenter()">Find Logistic Center</button>
+
+      <div class="bottom">
+        <div class="update update-city">
+          <div class="form-field">
+              <input type="text" [(ngModel)]="cityToUpdate.name" placeholder="Enter city name">
+          </div>
+          <button type="button" (click) = "updateCity()">Update city</button>
+        </div>
+
+        <div class="update-road update">
+          <div class="update-select">
+            <select  name="" id="" (change) = "roadToUpdate.startCityId = $event.target.value">
+              <option selected disabled>Select start city</option>
+              <option *ngFor="let city of allCities" [value]='city.id'>{{city.label}}</option>
+            </select>
+
+            <select name="" id="" (change) = "roadToUpdate.endCityId = $event.target.value">
+              <option selected disabled>Select end city</option>
+              <option *ngFor="let city of allCities"  [value]='city.id'>{{city.label}}</option>
+            </select>
+          </div>
+
+          <input type="number" [(ngModel)]="roadToUpdate.distance" placeholder="Enter Distance" style="margin-bottom: 25px;">
+          <button [disabled] = "roadToUpdate.startCityId == roadToUpdate.endCityId || roadToUpdate == 0" type="button" (click) = "updateRoad()">Update road</button>
+        </div>
+      </div>
+
+
+
+
+    </div>
+
+    <div class="visuals body-section">
+      <ngx-graph
+      [links]="allRoads"
+      [nodes]="allCities"
+      [layout]="'colaForceDirected'"
+      [update$] = 'update$'
+    >
+
+
+    <ng-template #defsTemplate>
+      <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto">
+        <svg:path d="M0,-5L10,0L0,5" class="arrow-head" />
+      </svg:marker>
+    </ng-template>
+
+
+    <ng-template #nodeTemplate let-node>
+      <svg:g class="node" (click) = "onCityClicked(node)">
+        <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.dimension.height" [attr.fill]="node.color" />
+        <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.dimension.height / 2" >{{node.label}}</svg:text>
+      </svg:g>
+    </ng-template>
+
+    <ng-template #linkTemplate let-link>
+      <svg:g class="edge" (click) = "onRoadClicked(link)">
+        <svg:path class="line" stroke-width="2" marker-end="url(#arrow)">
+        </svg:path>
+        <svg:text class="edge-label" text-anchor="middle">
+          <textPath class="text-path" [attr.href]="'#' + link.id" [style.dominant-baseline]="link.dominantBaseline" startOffset="50%">
+            {{link.label}}
+          </textPath>
+        </svg:text>
+      </svg:g>
+    </ng-template>
+    </ngx-graph>
+    </div>
+  </div>
+</section>
