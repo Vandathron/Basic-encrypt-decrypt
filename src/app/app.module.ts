@@ -9,7 +9,6 @@ import {BrowserAnimationsModule}from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
@@ -21,7 +20,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    NgxChartsModule,
     NgxGraphModule,
     BrowserAnimationsModule,
     ReactiveFormsModule
