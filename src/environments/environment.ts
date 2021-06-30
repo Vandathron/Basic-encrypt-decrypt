@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  ApiRoute: "http://localhost:5000/api"
+  ApiRoute: "https://file-encrypt-1.herokuapp.com/api"
 };
 
 /*

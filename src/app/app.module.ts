@@ -1,7 +1,8 @@
+import { GeneralInterceptorService } from './general-interceptor.service';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { NgModule } from '@angular/core';
 import { BrowserModule} from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpInterceptor } from '@angular/common/http';
 
 import {BrowserAnimationsModule}from '@angular/platform-browser/animations';
 
@@ -26,7 +27,9 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     ReactiveFormsModule
   ],
 
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: GeneralInterceptorService, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

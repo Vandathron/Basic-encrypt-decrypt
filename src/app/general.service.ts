@@ -1,5 +1,5 @@
 import { environment } from './../environments/environment';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ICity } from './ICity';
@@ -15,40 +15,15 @@ export class GeneralService {
     private httpClient: HttpClient
   ) { }
 
-
-  public createCity(city: ICity): Observable<any>{
-    return this.httpClient.post(`${this.apiUrl}/City/Create`, city);
+  public encryptImage(file: FormData): Observable<HttpResponse<any>>{
+    return this.httpClient.post<HttpResponse<any>>(`${this.apiUrl}/encrypt`, file, {responseType:'blob' as any, observe: 'response', headers: ({'Access-Control-Expose-Headers': 'Set-Cookie'})});
   }
 
-  public createBulkCity(cities: ICity[]): Observable<any>{
-    return this.httpClient.post(`${this.apiUrl}/City/BulkCreate`, cities);
+  public decryptImage(encryptedImage: FormData): Observable<any>{
+    const params = new HttpParams().set("key", "Value");
+    return this.httpClient.post<any>(`${this.apiUrl}/decrypt`, encryptedImage, {responseType:'blob' as any});
   }
 
-  public updateCity(cityToUpdate: ICity) : Observable<any>{
-    const params = new HttpParams().set("id", cityToUpdate.id?.toString());
-    return this.httpClient.patch(`${this.apiUrl}/City/Update`, cityToUpdate, {params});
-  }
-
-  public getAllCities(): Observable<IBaseResponse<ICity[]>>{
-    return this.httpClient.get<IBaseResponse<ICity[]>>(`${this.apiUrl}/City/All`);
-  }
-
-  public createRoad(city: IRoad): Observable<any>{
-    return this.httpClient.post(`${this.apiUrl}/Road/Create`, city);
-  }
-
-  public updateRoad(roadtoUpdate: IRoad) : Observable<any>{
-    const params = new HttpParams().set("id", roadtoUpdate.id.toString());
-    return this.httpClient.patch(`${this.apiUrl}/Road/Update`, roadtoUpdate, {params});
-  }
-
-  public getAllRoads(): Observable<IBaseResponse<IRoad[]>>{
-    return this.httpClient.get<IBaseResponse<IRoad[]>>(`${this.apiUrl}/Road/All`);
-  }
-
-  public findLogisticCenter(): Observable<IBaseResponse<number>>{
-    return this.httpClient.get<IBaseResponse<number>>(`${this.apiUrl}/LogisticsCenter/Retrieve`);
-  }
 
   private apiUrl: string = environment.ApiRoute;
 }
