@@ -4,9 +4,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ICity } from './ICity';
 import {map} from 'rxjs/operators';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import * as shape from 'd3-shape';
 import { IRoad } from './IRoad';
-import {Node, ClusterNode, D3Edge, Edge} from '@swimlane/ngx-graph'
 import { Subject, Observable } from 'rxjs';
 
 @Component({

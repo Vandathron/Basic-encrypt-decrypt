@@ -1,5 +1,4 @@
 import { GeneralInterceptorService } from './general-interceptor.service';
-import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { NgModule } from '@angular/core';
 import { BrowserModule} from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS, HttpInterceptor } from '@angular/common/http';
@@ -20,7 +19,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    NgxGraphModule,
     BrowserAnimationsModule,
     ReactiveFormsModule
   ],
