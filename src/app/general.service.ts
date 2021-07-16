@@ -15,13 +15,13 @@ export class GeneralService {
     private httpClient: HttpClient
   ) { }
 
-  public encryptImage(file: FormData): Observable<HttpResponse<any>>{
-    return this.httpClient.post<HttpResponse<any>>(`${this.apiUrl}/encrypt`, file, {responseType:'blob' as any, observe: 'response', headers: ({'Access-Control-Expose-Headers': 'Set-Cookie'})});
+  public encryptImage(file: FormData){
+    return this.httpClient.post(`${this.apiUrl}/encrypt`, file, { responseType: "blob" as any, observe: 'response'});
   }
 
-  public decryptImage(encryptedImage: FormData): Observable<any>{
+  public decryptImage(encryptedImage: FormData){
     const params = new HttpParams().set("key", "Value");
-    return this.httpClient.post<any>(`${this.apiUrl}/decrypt`, encryptedImage, {responseType:'blob' as any});
+    return this.httpClient.post(`${this.apiUrl}/decrypt`, encryptedImage, {responseType:'blob' as any, observe: 'response'});
   }
 
 

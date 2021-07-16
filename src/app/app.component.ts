@@ -41,12 +41,8 @@ export class AppComponent  implements OnInit{
     f.append("file",this.fileToUpload);
     this.generalService.encryptImage(f).pipe(
       map( x => {
-        x.headers.keys().map( (key) => console.log(`${key}: ${x.headers.get(key)}`));
-        console.log(x);
-        console.log("hello");
-        console.log(x.headers.get('x-auth-token'));
-        console.log(x.headers.keys());
-        // console.log(this.currentKey);
+        this.currentKey = x.headers.get('key') as string;
+        localStorage.setItem('currentKey', this.currentKey);
         let reader = new FileReader();
         this.imageOutput = x.body;
         this.isLoading = false;
@@ -64,13 +60,14 @@ export class AppComponent  implements OnInit{
     this.loadingText = "Decrypting, please wait";
     let f = new FormData();
     f.append("file",this.fileToUpload);
-    f.append("key", this.currentKey);
+    f.append("key", localStorage.getItem('currentKey') as string);
     this.generalService.decryptImage(f).pipe(
       map( x => {
         let reader = new FileReader();
-        reader.readAsDataURL(x);
+        reader.readAsDataURL(x.body as any);
         reader.onload = () => {
           this.imageOutput = reader.result;
+          this.uploadedImage = reader.result;
         }
         this.isLoading = false;
         this.loadingText = "Decrypted. Done";
@@ -87,9 +84,8 @@ export class AppComponent  implements OnInit{
     link.download = "encryptedImage";
     link.href = (window.webkitURL || window.URL).createObjectURL(this.imageOutput);
     link.click();
-    console.log("downloaded");
   }
-  public currentKey: string = 'beed4200c58eecc2ace10a968c9d23fd';
+  public currentKey: string = '';
 
   public fileToUpload;
 
