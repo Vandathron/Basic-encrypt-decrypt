@@ -35,6 +35,7 @@ export class AppComponent  implements OnInit{
   }
 
   public encryptImage(): void {
+    this.isEncryptionMode = true;
     this.isLoading = true;
     this.loadingText = "Encrypting, Please wait";
     let f = new FormData();
@@ -56,6 +57,7 @@ export class AppComponent  implements OnInit{
   }
 
   public decryptImage(): void {
+    this.isEncryptionMode = false;
     this.isLoading = true;
     this.loadingText = "Decrypting, please wait";
     let f = new FormData();
@@ -68,6 +70,7 @@ export class AppComponent  implements OnInit{
         reader.onload = () => {
           this.imageOutput = reader.result;
           this.uploadedImage = reader.result;
+          console.log(this.uploadedImage);
         }
         this.isLoading = false;
         this.loadingText = "Decrypted. Done";
@@ -81,10 +84,24 @@ export class AppComponent  implements OnInit{
 
   public downloadOutput(): void {
     const link = this.rd.createElement("a");
-    link.download = "encryptedImage";
-    link.href = (window.webkitURL || window.URL).createObjectURL(this.imageOutput);
+    link.download = "EncryptedImage";
+    if(this.isEncryptionMode){
+      link.href = (window.webkitURL || window.URL).createObjectURL(this.imageOutput);
     link.click();
+    }else {
+      var a = document.createElement("a"); //Create <a>
+      a.href =  this.uploadedImage; //Image Base64 Goes here
+      let ext = '';
+      for(let i = 11; i < 16; i++){
+        if((this.uploadedImage as string)[i] != ';') ext = `${ext}${this.uploadedImage[i]}`
+        else break;
+      }
+      a.download = `DecryptedImage.${ext}`; //File name Here
+      a.click();
+    }
   }
+
+  public isEncryptionMode = true;
   public currentKey: string = '';
 
   public fileToUpload;
